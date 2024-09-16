@@ -25,6 +25,12 @@ get_access_token() {
   }" | jq -r '.accessToken'
 }
 
+configure_git_auth() {
+  echo "Configuring Git to use the GitHub PAT for authentication..."
+  git config --global credential.helper 'store --file=/root/.git-credentials'
+  echo "https://oauth2:$github_token@github.com" > /root/.git-credentials
+}
+
 send_log() {
   message=$1
   curl --location "https://api.getport.io/v1/actions/runs/$port_run_id/logs" \
@@ -92,6 +98,8 @@ apply_cookiecutter_template() {
   for key in $(echo "$extra_context" | jq -r 'keys[]'); do
       args+=("$key=$(echo "$extra_context" | jq -r ".$key")")
   done
+
+  configure_git_auth
 
   # Call cookiecutter with extra context arguments
 
