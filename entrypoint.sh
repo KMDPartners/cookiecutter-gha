@@ -17,6 +17,7 @@ scaffold_directory="$INPUT_SCAFFOLDDIRECTORY"
 create_port_entity="$INPUT_CREATEPORTENTITY"
 branch_name="port_$port_run_id"
 git_url="$INPUT_GITHUBURL"
+default_branch="$INPUT_DEFAULTBRANCH"
 
 get_access_token() {
   curl -s --location --request POST 'https://api.getport.io/v1/auth/access_token' --header 'Content-Type: application/json' --data-raw "{
@@ -123,7 +124,7 @@ push_to_repository() {
     git commit -m "Scaffolded project in $scaffold_directory"
     git push -u origin $branch_name
 
-    send_log "Creating pull request to merge $branch_name into main 🚢"
+    send_log "Creating pull request to merge $branch_name into $default_branch 🚢"
 
     owner=$(echo "$monorepo_url" | awk -F'/' '{print $4}')
     repo=$(echo "$monorepo_url" | awk -F'/' '{print $5}')
@@ -131,7 +132,7 @@ push_to_repository() {
     echo "Owner: $owner"
     echo "Repo: $repo"
 
-    PR_PAYLOAD=$(jq -n --arg title "Scaffolded project in $repo" --arg head "$branch_name" --arg base "main" '{
+    PR_PAYLOAD=$(jq -n --arg title "Scaffolded project in $repo" --arg head "$branch_name" --arg base "$default_branch" '{
       "title": $title,
       "head": $head,
       "base": $base
@@ -155,9 +156,9 @@ push_to_repository() {
       git config user.email "github-actions[bot]@users.noreply.github.com"
       git add .
       git commit -m "Initial commit after scaffolding"
-      git branch -M main
+      git branch -M $default_branch
       git remote add origin https://oauth2:$github_token@github.com/$org_name/$repository_name.git
-      git push -u origin main
+      git push -u origin $default_branch
   fi
 }
 

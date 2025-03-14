@@ -47,6 +47,10 @@ inputs:
     description: 'Whether to create a Port entity for the repository'
     required: false
     default: "true"
+  defaultBranch:
+    description: 'The default branch on the repo.'
+    required: true
+    default: 'main'
 runs:
   using: docker
   image: Dockerfile
