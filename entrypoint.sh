@@ -66,7 +66,7 @@ create_repository() {
   elif [ $userType == "Organization" ]; then
     curl -i -H "Authorization: token $github_token" \
        -d "{ \
-          \"name\": \"$repository_name\", \"private\": true
+          \"name\": \"$repository_name\", \"visibility\": \"internal\"
         }" \
       $git_url/orgs/$org_name/repos
   else
