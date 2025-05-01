@@ -155,7 +155,7 @@ push_to_repository() {
       git config user.name "GitHub Actions Bot"
       git config user.email "github-actions[bot]@users.noreply.github.com"
       git add .
-      git commit -m "Initial commit after scaffolding"
+      git commit -m "Initial commit after scaffolding [skip ci]"
       git branch -M $default_branch
       git remote add origin https://oauth2:$github_token@github.com/$org_name/$repository_name.git
       git push -u origin $default_branch
