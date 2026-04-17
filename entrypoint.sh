@@ -104,7 +104,7 @@ apply_cookiecutter_template() {
 
   # Call cookiecutter with extra context arguments
 
-  echo "cookiecutter --no-input $cookie_cutter_template $args"
+  echo "cookiecutter --no-input $cookie_cutter_template ${args[*]}"
 
   # Call cookiecutter with extra context arguments
 
